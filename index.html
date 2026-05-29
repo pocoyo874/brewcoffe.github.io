@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Аромат кофе | Уютная кофейня</title>
+    <!-- Подключаем красивые шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf7f2;
+            color: #3e2c1b;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        /* Шапка и навигация */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 247, 242, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(139, 90, 43, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #4a2c17;
+            z-index: 1001;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+        }
+
+        /* Навигация десктоп */
+        .nav-desktop {
+            display: flex;
+            gap: 2.2rem;
+            align-items: center;
+        }
+
+        .nav-desktop a {
+            text-decoration: none;
+            color: #4a2c17;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 0.3rem 0;
+            transition: color 0.3s;
+        }
+
+        .nav-desktop a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #b47b4c;
+            transition: width 0.3s ease;
+        }
+
+        .nav-desktop a:hover {
+            color: #b47b4c;
+        }
+
+        .nav-desktop a:hover::after {
+            width: 100%;
+        }
+
+        /* Гамбургер кнопка */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 32px;
+            height: 24px;
+            cursor: pointer;
+            z-index: 1001;
+            background: transparent;
+            border: none;
+            padding: 0;
+            position: relative;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: #4a2c17;
+            border-radius: 8px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transform-origin: center;
+        }
+
+        /* Анимация гамбургера в крестик */
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(10px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-10px) rotate(-45deg);
+        }
+
+        /* Мобильное меню (выезжающее) */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 320px;
+            max-width: 85vw;
+            height: 100vh;
+            background: #fefaf5;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+            transition: right 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+            padding: 2rem;
+            border-left: 1px solid rgba(180, 123, 76, 0.2);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: #3e2c1b;
+            font-size: 1.6rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.3s, transform 0.3s;
+            position: relative;
+        }
+
+        .mobile-menu a:hover {
+            color: #b47b4c;
+            transform: translateX(5px);
+        }
+
+        .mobile-menu a::before {
+            content: '☕';
+            position: absolute;
+            left: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .mobile-menu a:hover::before {
+            opacity: 0.7;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Главный экран */
+        .hero {
+            height: 100vh;
+            min-height: 650px;
+            background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            padding: 0 1.5rem;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #b47b4c;
+            color: #fff;
+            padding: 1rem 2.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.4s;
+            border: 2px solid #b47b4c;
+            box-shadow: 0 8px 20px rgba(180, 123, 76, 0.3);
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .btn:hover {
+            background: transparent;
+            border-color: #fff;
+            color: #fff;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Секции */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 3.5rem;
+            color: #3e2c1b;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background: #b47b4c;
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* Карточки меню */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .menu-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            transition: transform 0.4s, box-shadow 0.4s;
+            border: 1px solid rgba(180, 123, 76, 0.1);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.12);
+        }
+
+        .menu-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .menu-card h3 {
+            font-size: 1.7rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .menu-card p {
+            color: #5e4730;
+            font-weight: 300;
+        }
+
+        /* Контакты */
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .contact-item {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 20px;
+            flex: 1 1 250px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #3e2c1b;
+            color: #e3d6c8;
+            font-size: 0.9rem;
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .header {
+                padding: 0.9rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .mobile-menu {
+                width: 100%;
+                max-width: 100vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка с гамбургером -->
+    <header class="header">
+        <a href="#" class="logo">
+            <span class="logo-icon">🫘</span>
+            <span class="logo-text">Brew</span>
+        </a>
+        <nav class="nav-desktop">
+            <a href="#">Главная</a>
+            <a href="#menu">Меню</a>
+            <a href="#about">О нас</a>
+            <a href="#contact">Контакты</a>
+        </nav>
+        <button class="hamburger" id="hamburger" aria-label="Открыть меню">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Оверлей для закрытия меню -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Мобильное меню -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="#" class="mobile-link">Главная</a>
+        <a href="#menu" class="mobile-link">Меню</a>
+        <a href="#about" class="mobile-link">О нас</a>
+        <a href="#contact" class="mobile-link">Контакты</a>
+    </nav>
+
+    <!-- Главный экран -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Искусство вкуса кофе</h1>
+            <p>Свежая обжарка, уютная атмосфера и моменты чистого наслаждения.</p>
+            <a href="#menu" class="btn">Смотреть меню</a>
+        </div>
+    </section>
+
+    <!-- Меню -->
+    <section id="menu">
+        <h2 class="section-title">Популярные напитки</h2>
+        <div class="menu-grid">
+            <div class="menu-card">
+                <div class="menu-icon">☕</div>
+                <h3>Эспрессо</h3>
+                <p>Насыщенный, плотный, с золотистой пенкой. Классика жанра.</p>
+            </div>
+            <div class="menu-card">
+                <div class="menu-icon">🥛</div>
+                <h3>Латте</h3>
+                <p>Нежное сочетание эспрессо и воздушного молока.</p>
+            </div>
+            <div class="menu-card">
+                <div class="menu-icon">🍫</div>
+                <h3>Мокко</h3>
+                <p>Кофе и бельгийский шоколад — десерт в чашке.</p>
+            </div>
+            <div class="menu-card">
+                <div class="menu-icon">🧊</div>
+                <h3>Колд брю</h3>
+                <p>Медленное заваривание, мягкий вкус без горечи.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- О нас -->
+    <section id="about">
+        <h2 class="section-title">Наша философия</h2>
+        <div style="max-width: 700px; margin: 0 auto; text-align: center; font-size: 1.2rem; color: #5e4730;">
+            <p>Мы отбираем зерна с лучших плантаций, обжариваем с заботой и готовим с душой. Каждая чашка — это маленькое путешествие к истокам вкуса.</p>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contact">
+        <h2 class="section-title">Где нас найти</h2>
+        <div class="contact-info">
+            <div class="contact-item">
+                <div style="font-size: 2rem;">📍</div>
+                <h3>Адрес</h3>
+                <p>ул. Кофейная, 17, Москва</p>
+            </div>
+            <div class="contact-item">
+                <div style="font-size: 2rem;">🕒</div>
+                <h3>Часы</h3>
+                <p>Пн–Пт: 7:30–21:00<br>Сб–Вс: 9:00–22:00</p>
+            </div>
+            <div class="contact-item">
+                <div style="font-size: 2rem;">📞</div>
+                <h3>Связь</h3>
+                <p>+7 (999) 123-45-67<br>hello@brewcoffee.ru</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 Brew Coffee — кофейня твоего настроения.</p>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('overlay');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', closeMenu);
+
+        // Закрытие при клике на любую ссылку в мобильном меню
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                closeMenu();
+            });
+        });
+
+        // Закрытие по клавише Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                closeMenu();
+            }
+        });
+    </script>
+</body>
+</html>
